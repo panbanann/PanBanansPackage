@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "panbananspackage",
+  "version": "${version}",
+  "name": "Pan Banans Package",
+  "description": "Pan Banan adding model to the game",
+  "authors": [
+    "panbanan"
+  ],
+  "contact": {},
+  "license": "MIT",
+  "icon": " ",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "panbanan.panbananspackage.client.PanBanansPackageClient"
+    ],
+    "main": [
+      "panbanan.panbananspackage.PanBanansPackage"
+    ]
+  },
+  "mixins": [
+    "panbananspackage.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.11.6",
+    "fabric": "*",
+    "minecraft": "1.16.5"
+  }
+}
