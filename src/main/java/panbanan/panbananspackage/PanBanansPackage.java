@@ -12,7 +12,7 @@ import java.util.IdentityHashMap;
 
 public class PanBanansPackage implements ModInitializer {
 
-    public  static final String MOD_ID = "panbananspackage";
+    public static final String MOD_ID = "panbananspackage";
 
     public static Identifier ID(String path) {
         return new Identifier(MOD_ID, path);
@@ -21,11 +21,14 @@ public class PanBanansPackage implements ModInitializer {
     public void onInitialize() {
         try {
             ItemsConfig.configInit();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
-        ItemRegistry.registerItems();
+        ItemRegistry.init();
+        debuggingClass.initializeDebug();
         GeckoLib.initialize();
         EntityRegister.onInitialize();
+
     }
 }
