@@ -1,14 +1,14 @@
 {
 	"credit": "Made by Jaket010 using Blockbench",
 	"textures": {
-		"0": "panbananspackage:items/eagle_spear/voxel_atlas",
-		"3": "panbananspackage:items/eagle_spear/orange",
-		"5": "panbananspackage:items/eagle_spear/orange3",
-		"6": "panbananspackage:items/eagle_spear/dark_orange",
-		"7": "panbananspackage:items/eagle_spear/emerald",
-		"8": "panbananspackage:items/eagle_spear/blade_metal",
-		"9": "panbananspackage:items/eagle_spear/blade_metal2",
-		"particle": "panbananspackage:items/eagle_spear/voxel_atlas"
+		"0": "panbananspackage:items/weapon_risky_manuever/voxel_atlas",
+		"3": "panbananspackage:items/weapon_risky_manuever/orange",
+		"5": "panbananspackage:items/weapon_risky_manuever/orange3",
+		"6": "panbananspackage:items/weapon_risky_manuever/dark_orange",
+		"7": "panbananspackage:items/weapon_risky_manuever/emerald",
+		"8": "panbananspackage:items/weapon_risky_manuever/blade_metal",
+		"9": "panbananspackage:items/weapon_risky_manuever/blade_metal2",
+		"particle": "panbananspackage:items/weapon_risky_manuever/voxel_atlas"
 	},
 	"elements": [
 		{

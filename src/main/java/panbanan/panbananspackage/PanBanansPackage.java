@@ -6,9 +6,7 @@ import panbanan.panbananspackage.config.ItemsConfig;
 import panbanan.panbananspackage.entity.EntityRegister;
 import panbanan.panbananspackage.items.ItemRegistry;
 import software.bernie.geckolib3.GeckoLib;
-
 import java.io.IOException;
-import java.util.IdentityHashMap;
 
 public class PanBanansPackage implements ModInitializer {
 
@@ -25,8 +23,9 @@ public class PanBanansPackage implements ModInitializer {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        ItemRegistry.init();
-        debuggingClass.initializeDebug();
+        ItemRegistry.registerItems();
+        //ItemRegistry.init();
+        //debuggingClass.initializeDebug();
         GeckoLib.initialize();
         EntityRegister.onInitialize();
 

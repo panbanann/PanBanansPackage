@@ -1,15 +1,15 @@
 {
-  "item.panbananspackage.potat_helmet":   "Potat Helmet",
-  "item.panbananspackage.potat_chest":   "Potat Chestplate",
-  "item.panbananspackage.potat_leggings":   "Potat Pants",
-  "item.panbananspackage.potat_boots":   "Potat Boots",
+  "item.panbananspackage.armor_potat_helmet":   "Potat Helmet",
+  "item.panbananspackage.armor_potat_chest":   "Potat Chestplate",
+  "item.panbananspackage.armor_potat_leggings":   "Potat Pants",
+  "item.panbananspackage.armor_potat_boots":   "Potat Boots",
 
-  "item.panbananspackage.lupus_borealis":   "Lupus Borealis",
-  "item.panbananspackage.risky_manuever":   "Risky Manuever",
-  "item.panbananspackage.umbral_valkyrie":   "Umbral Valkyrie",
-  "item.panbananspackage.rifts_eclipse":   "Rifts Eclipse",
-  "item.panbananspackage.morningstar":   "Morningstar",
-  "item.panbananspackage.mare_tranquilitis":   "Mare Tranquilitis",
+  "item.panbananspackage.weapon_lupus_borealis":   "Lupus Borealis",
+  "item.panbananspackage.weapon_risky_manuever":   "Risky Manuever",
+  "item.panbananspackage.weapon_umbral_valkyrie":   "Umbral Valkyrie",
+  "item.panbananspackage.weapon_rifts_eclipse":   "Rifts Eclipse",
+  "item.panbananspackage.weapon_morningstar":   "Morningstar",
+  "item.panbananspackage.weapon_mare_tranquilitis":   "Mare Tranquilitis",
 
   "entity.panbananspackage.fiery_golem": "Fiery Golem"
 

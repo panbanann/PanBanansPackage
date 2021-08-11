@@ -1,52 +1,63 @@
 package panbanan.panbananspackage.items;
 
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.*;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-import org.jetbrains.annotations.Debug;
 import panbanan.panbananspackage.PanBanansPackage;
 import panbanan.panbananspackage.config.ItemsConfig;
-import panbanan.panbananspackage.items.armors.potatArmorSet;
-
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import sun.security.util.Debug;
+import java.util.*;
 
 public class ItemRegistry {
-    public static final EnumMap<ItemsIds, Item> items = new EnumMap<>(ItemsIds.class);
-
+    //public static final Map<ItemsIds, Item> items = new Map<>(ItemsIds.class);
+    public static final HashMap<String, Item> ITEMS = new HashMap<>();
+    public static Item getItemId(String id){
+        return ITEMS.getOrDefault(id, Items.AIR);
+    }
+    /*
     //Armor pieces
     public static final Item POTAT_HELMET = new potatArmorSet(ArmorMaterials.LEATHER, EquipmentSlot.HEAD, new Item.Settings().group(ItemGroup.COMBAT));
     public static final Item POTAT_CHEST = new potatArmorSet(ArmorMaterials.LEATHER, EquipmentSlot.CHEST, new Item.Settings().group(ItemGroup.COMBAT));
     public static final Item POTAT_LEGGINGS = new potatArmorSet(ArmorMaterials.LEATHER, EquipmentSlot.LEGS, new Item.Settings().group(ItemGroup.COMBAT));
     public static final Item POTAT_BOOTS = new potatArmorSet(ArmorMaterials.LEATHER, EquipmentSlot.FEET, new Item.Settings().group(ItemGroup.COMBAT));
-
     //Weapons
-    //public static final Item EAGLE_SPEAR = new Items(ToolMaterials.NETHERITE, 5, 0.1F,new Item.Settings().group(ItemGroup.COMBAT));
+    public static final Item EAGLE_SPEAR = new Items(ToolMaterials.NETHERITE, 5, 0.1F,new Item.Settings().group(ItemGroup.COMBAT));
     public static final Item LUPUS_BOREALIS = new MyItems(ToolMaterials.NETHERITE, 3, 0.1F, new Item.Settings().group(ItemGroup.COMBAT));
     public static final Item MARE_TRANQUILITIS = new MyItems(ToolMaterials.NETHERITE, 5, 0.1F, new Item.Settings().group(ItemGroup.COMBAT));
     public static final Item MORNINGSTAR = new MyItems(ToolMaterials.NETHERITE, 5, 0.1F, new Item.Settings().group(ItemGroup.COMBAT));
     public static final Item RIFTS_ECLIPSE = new MyItems(ToolMaterials.NETHERITE, 5, 0.1F, new Item.Settings().group(ItemGroup.COMBAT));
     public static final Item RISKY_MANUEVER = new MyItems(ToolMaterials.NETHERITE, 5, 0.1F, new Item.Settings().group(ItemGroup.COMBAT));
-    public static final Item UMBRAL_VALKYRIE = new MyItems(ToolMaterials.NETHERITE, 6, 0.1F, new Item.Settings().group(ItemGroup.COMBAT));
+    public static final Item UMBRAL_VALKYRIE = new MyItems(ToolMaterials.NETHERITE, 6, 0.1F, new Item.Settings().group(ItemGroup.COMBAT));*/
 
-    public static void registerItems(ItemsIds itemsIds) {
+    public static void registerItems() {
 
-        Item item = new Item(new Item.Settings().group(ItemGroup.COMBAT));
-        items.put(itemsIds, item);
-        Registry.register(Registry.ITEM, PanBanansPackage.ID(itemsIds.toString().toLowerCase()), item);
-    }
-
-    public static void init() {
-        for (ItemsIds itemsIds : ItemsIds.values()) {
-            registerItems(itemsIds);
+        final Map<String, Boolean> itemsMap = ItemsConfig.newMap;
+        for (Map.Entry<String, Boolean> entry : itemsMap.entrySet()){
+            String itemID = entry.getKey().toUpperCase();
+            Boolean isEnabled = entry.getValue();
+            Debug.println(itemID, "is itemID and it's boolean is: " + isEnabled);
+            if(isEnabled){
+                if(itemID.contains("WEAPON"))
+                ITEMS.put(itemID, new MyItems(ToolMaterials.NETHERITE, 0, 0.0F, new Item.Settings().group(ItemGroup.COMBAT)));
+                //Registry.register(Registry.ITEM, PanBanansPackage.ID(itemID.toLowerCase()), itemID);
+            }
+        }
+        ArrayList<String> IDs = new ArrayList<>(ITEMS.keySet());
+        Collections.sort(IDs);
+        for(String id : IDs){
+            String path = id.toLowerCase();
+            Registry.register(Registry.ITEM, PanBanansPackage.ID(path), ITEMS.get(id));
         }
 
 
+        //Item item = new Item(new Item.Settings().group(ItemGroup.COMBAT));
+        //items.put(itemsIds, item);
+        //Registry.register(Registry.ITEM, PanBanansPackage.ID(itemsIds.toString().toLowerCase()), item);
     }
 
+    /*public static void init() {
+        for (ItemsIds itemsIds : ItemsIds.values()) {
+            registerItems(itemsIds);
+        }*/
 }
         /*Map<String, Boolean> newMap;
         newMap = ItemsConfig.map;
@@ -60,7 +71,6 @@ public class ItemRegistry {
                 }
             }
         }*/
-
 
         /*Iterator<Map.Entry<String, Boolean>> iterator = newMap.entrySet().iterator();
         while (iterator.hasNext()) {
@@ -85,4 +95,3 @@ public class ItemRegistry {
         Registry.register(Registry.ITEM, new Identifier(PanBanansPackage.MOD_ID, "rifts_eclipse"), RIFTS_ECLIPSE);
         Registry.register(Registry.ITEM, new Identifier(PanBanansPackage.MOD_ID, "risky_manuever"), RISKY_MANUEVER);
         Registry.register(Registry.ITEM, new Identifier(PanBanansPackage.MOD_ID, "umbral_valkyrie"), UMBRAL_VALKYRIE);*/
-

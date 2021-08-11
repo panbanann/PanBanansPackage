@@ -1,11 +1,11 @@
 {
 	"credit": "Made by Popsapeter using Blockbench",
 	"textures": {
-		"0": "panbananspackage:items/lupus_borealis/lead_knot",
-		"1": "panbananspackage:items/lupus_borealis/polished_basalt_side",
-		"2": "panbananspackage:items/lupus_borealis/polished_basalt_top",
-		"3": "panbananspackage:items/lupus_borealis/fire_1",
-		"particle": "panbananspackage:items/lupus_borealis/lead_knot"
+		"0": "panbananspackage:items/weapon_lupus_borealis/lead_knot",
+		"1": "panbananspackage:items/weapon_lupus_borealis/polished_basalt_side",
+		"2": "panbananspackage:items/weapon_lupus_borealis/polished_basalt_top",
+		"3": "panbananspackage:items/weapon_lupus_borealis/fire_1",
+		"particle": "panbananspackage:items/weapon_lupus_borealis/lead_knot"
 	},
 	"elements": [
 		{

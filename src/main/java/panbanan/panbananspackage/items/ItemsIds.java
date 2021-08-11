@@ -1,14 +1,10 @@
 package panbanan.panbananspackage.items;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+public class ItemsIds {
 
-public enum ItemsIds implements ItemConvertible {
-    LUPUS_BOREALIS,
+   /* LUPUS_BOREALIS,
     MARE_TRANQUILITIS,
     MORNINGSTAR,
     POTAT_BOOTS,
@@ -21,25 +17,23 @@ public enum ItemsIds implements ItemConvertible {
 
     public Item asItem(){
         return ItemRegistry.items.get(this);
+    }*/
+
+    public static Set itemsSets(){
+        Set<String> itemSet = new HashSet<String>();
+        itemSet.add("weapon_lupus_borealis");
+        itemSet.add("weapon_mare_tranquilitis");
+        itemSet.add("weapon_morningstar");
+        itemSet.add("armor_potat_boots");
+        itemSet.add("armor_potat_chest");
+        itemSet.add("armor_potat_helmet");
+        itemSet.add("armor_potat_leggings");
+        itemSet.add("weapon_rifts_eclipse");
+        itemSet.add("weapon_risky_manuever");
+        itemSet.add("weapon_umbral_valkyrie");
+        return itemSet;
     }
 
-
-
-
-    /*public static Map itemsMaps(){
-        Map<String, Boolean> itemsMap = new HashMap<String, Boolean>();
-        itemsMap.put("LUPUS_BOREALIS", true);
-        itemsMap.put("MARE_TRANQUILITIS", true);
-        itemsMap.put("MORNINGSTAR", true);
-        itemsMap.put("POTAT_BOOTS", true);
-        itemsMap.put("POTAT_CHEST", true);
-        itemsMap.put("POTAT_HELMET", true);
-        itemsMap.put("POTAT_LEGGINGS", true);
-        itemsMap.put("RIFTS_ECLIPSE", true);
-        itemsMap.put("RISKY_MANUEVER", true);
-        itemsMap.put("UMBRAL_VALKYRIE", true);
-        return itemsMap;
-    }*/
 
 }
 
