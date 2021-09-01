@@ -48,6 +48,7 @@ public class FieryGolemEntity extends GolemEntity implements IAnimatable {
         data.addAnimationController(new AnimationController(this, "controller", 0, this::predicate));
     }
 
+
     @Override
     public AnimationFactory getFactory()
     {
@@ -64,6 +65,7 @@ public class FieryGolemEntity extends GolemEntity implements IAnimatable {
         this.targetSelector.add(3, new FollowTargetGoal(this, PlayerEntity.class, true));
         //this.targetSelector.add(3, new FollowTargetGoal(this, MobEntity.class, 5, false, false, (livingEntity) -> {
         //    return livingEntity instanceof Monster && !(livingEntity instanceof CreeperEntity);
+        this.goalSelector.add(2, new IronGolemWanderAroundGoal(this, 0.9D));
         //}));
         super.initGoals();
     }

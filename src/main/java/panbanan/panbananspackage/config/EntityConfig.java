@@ -1,14 +1,17 @@
 package panbanan.panbananspackage.config;
 
 import com.google.gson.*;
-import panbanan.panbananspackage.items.ItemsIds;
-import java.io.*;
-import java.nio.file.*;
+import panbanan.panbananspackage.entity.EntityIDs;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class ItemsConfig {
+public class EntityConfig {
 
     public static Map<String, Boolean> newMap = new HashMap<>();
 
@@ -35,12 +38,12 @@ public class ItemsConfig {
     }
 
     public static void configInit() throws IOException {
-        File configFile = new File("config/items_config.json");
+        File configFile = new File("config/entity_config.json");
         //JsonParser parser = new JsonParser();
 
         Map<Object, Boolean> map = new HashMap<>();
         if (!configFile.exists()) {
-            for (Object item : ItemsIds.itemsSets()) {
+            for (Object item : EntityIDs.entitySet()) {
                 map.put(item, true);
 
                 String itemsJson = gson.toJson(map);
@@ -48,12 +51,16 @@ public class ItemsConfig {
             }
         }
         if (configFile.exists()) {
-            JsonObject json = getJsonObject(readFile(new File("config/items_config.json")));
+            JsonObject json = getJsonObject(readFile(new File("config/entity_config.json")));
+            //JsonObject json = McdwBaseConfig.getJsonObject(McdwBaseConfig.readFile(new File("config/minecraft_dungeon_weapons/enchants_config.json5")));
             for (Map.Entry<String, JsonElement> entry : json.entrySet()) {
                 newMap.put(entry.getKey(), entry.getValue().getAsBoolean());
             }
+
         }
+
     }
+
 }
 
 

@@ -7,11 +7,11 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.item.GeoArmorItem;
 
-public class potatArmorSet extends GeoArmorItem implements IAnimatable {
+public class ArmorSet extends GeoArmorItem implements IAnimatable {
 
     private AnimationFactory factory = new AnimationFactory(this);
 
-    public potatArmorSet(ArmorMaterial material, EquipmentSlot slot, Settings builder) {
+    public ArmorSet(ArmorMaterial material, EquipmentSlot slot, Settings builder) {
         super(material, slot, builder);
     }
 

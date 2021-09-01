@@ -2,26 +2,26 @@ package panbanan.panbananspackage.items.models;
 
 import net.minecraft.util.Identifier;
 import panbanan.panbananspackage.PanBanansPackage;
-import panbanan.panbananspackage.items.armors.potatArmorSet;
+import panbanan.panbananspackage.items.armors.ArmorSet;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.renderer.geo.GeoArmorRenderer;
 
-public class PotatoRenderer extends GeoArmorRenderer<potatArmorSet> {
+public class PotatoRenderer extends GeoArmorRenderer<ArmorSet> {
 
     public PotatoRenderer(){
-        super(new AnimatedGeoModel<potatArmorSet>() {
+        super(new AnimatedGeoModel<ArmorSet>() {
             @Override
-            public Identifier getModelLocation(potatArmorSet potatArmorSet) {
+            public Identifier getModelLocation(ArmorSet ArmorSet) {
                 return new Identifier(PanBanansPackage.MOD_ID, "geo/potat.geo.json");
             }
 
             @Override
-            public Identifier getTextureLocation(potatArmorSet potatArmorSet) {
+            public Identifier getTextureLocation(ArmorSet ArmorSet) {
                 return new Identifier(PanBanansPackage.MOD_ID, "textures/armor/potat_texture.png");
             }
 
             @Override
-            public Identifier getAnimationFileLocation(potatArmorSet potatArmorSet) {
+            public Identifier getAnimationFileLocation(ArmorSet ArmorSet) {
                 return null;
             }
         });
