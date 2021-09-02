@@ -3,6 +3,7 @@ package panbanan.panbananspackage.entity.mobs;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.SlimeEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -49,6 +50,11 @@ public class MimicEntity extends MobEntity implements IAnimatable {
     @Override
     protected void initGoals() {
         super.initGoals();
+    }
+
+    @Override
+    public boolean canPickupItem(ItemStack stack) {
+        return false;
     }
 
 }

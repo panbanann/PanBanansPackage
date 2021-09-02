@@ -6,6 +6,9 @@ import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.SpawnEggItem;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import panbanan.panbananspackage.config.EntityConfig;
@@ -20,6 +23,7 @@ public class EntityRegister {
     public static EntityType<MimicEntity> MIMIC;
     //This is map read from EnityConfig file
     public static final Map<String, Boolean> entityMap = EntityConfig.newMap;
+    public static Item MIMIC_SPAWN_EGG = null;
 
     public static void onInitialize() {
         //Looping through map, saving keys and values and check for entity to register exact entity. Not automatic, maybe in the future.
@@ -34,6 +38,8 @@ public class EntityRegister {
             if ((entityID.equalsIgnoreCase("MIMIC")) && isEnabled) {
                 MIMIC = Registry.register(Registry.ENTITY_TYPE, new Identifier("panbananspackage", "mimic"), FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, MimicEntity::new).dimensions(EntityDimensions.fixed(0.5f, 1.1f)).build());
                 FabricDefaultAttributeRegistry.register(MIMIC, FieryGolemEntity.createMobAttributes().add(EntityAttributes.GENERIC_MAX_HEALTH, 80.0D).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.3D).add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 0.6D).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 8.0D));
+                MIMIC_SPAWN_EGG = new SpawnEggItem(MIMIC, 12895428, 11382189, new Item.Settings().group(ItemGroup.MISC));
+                Registry.register(Registry.ITEM, new Identifier("panbananspackage", "mimic_egg"),MIMIC_SPAWN_EGG);
             }
 
         }

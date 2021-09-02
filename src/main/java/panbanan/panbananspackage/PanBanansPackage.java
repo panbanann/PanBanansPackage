@@ -2,6 +2,7 @@ package panbanan.panbananspackage;
 
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.util.Identifier;
+import panbanan.panbananspackage.blocks.BlockRegistry;
 import panbanan.panbananspackage.config.EntityConfig;
 import panbanan.panbananspackage.config.ItemsConfig;
 import panbanan.panbananspackage.entity.EntityRegister;
@@ -26,6 +27,7 @@ public class PanBanansPackage implements ModInitializer {
         }
         ItemRegistry.registerItems();
         GeckoLib.initialize();
+        BlockRegistry.blockInit();
         EntityRegister.onInitialize();
 
     }
