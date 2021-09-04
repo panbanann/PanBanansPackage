@@ -1,10 +1,13 @@
 package panbanan.panbananspackage.entity.mobs;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.SlimeEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -17,11 +20,12 @@ public class MimicEntity extends MobEntity implements IAnimatable {
 
     private AnimationFactory factory = new AnimationFactory(this);
 
-    public MimicEntity(EntityType<? extends MobEntity> type, World worldIn){
+    public MimicEntity(EntityType<? extends MimicEntity> type, World worldIn){
         super(type, worldIn);
         this.ignoreCameraFrustum = true;
 
     }
+
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event)
     {
         /*if (event.isMoving()){
@@ -56,5 +60,11 @@ public class MimicEntity extends MobEntity implements IAnimatable {
     public boolean canPickupItem(ItemStack stack) {
         return false;
     }
+
+    @Override
+    public boolean canSpawn(WorldAccess world, SpawnReason spawnReason) {
+        return super.canSpawn(world, spawnReason);
+    }
+
 
 }
