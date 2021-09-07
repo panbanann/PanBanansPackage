@@ -1,5 +1,7 @@
 #Special Thanks
+
 Emporium for helping with a mimic
+
 Chronos for helping with a config
 
 
