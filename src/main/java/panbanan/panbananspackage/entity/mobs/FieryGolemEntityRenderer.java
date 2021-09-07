@@ -12,4 +12,9 @@ public class FieryGolemEntityRenderer extends GeoEntityRenderer<FieryGolemEntity
         super(renderManager, new FieryGolemModel());
         this.shadowRadius = 0.35F; //change 0.7 to the desired shadow size.
     }
+
+    @Override
+    protected float getDeathMaxRotation(FieryGolemEntity entityLivingBaseIn) {
+        return 0.0f;
+    }
 }

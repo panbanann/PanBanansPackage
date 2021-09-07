@@ -1,11 +1,10 @@
 package panbanan.panbananspackage.entity.mobs;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.mob.SlimeEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.MobSpawnerEntry;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -20,11 +19,12 @@ public class MimicEntity extends MobEntity implements IAnimatable {
 
     private AnimationFactory factory = new AnimationFactory(this);
 
-    public MimicEntity(EntityType<? extends MimicEntity> type, World worldIn){
+    public MimicEntity(EntityType<? extends MobEntity> type, World worldIn){
         super(type, worldIn);
         this.ignoreCameraFrustum = true;
 
     }
+
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event)
     {
@@ -32,11 +32,11 @@ public class MimicEntity extends MobEntity implements IAnimatable {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", true));
             return PlayState.CONTINUE;
         }
-        if ((this.dead || this.getHealth() < 0.01)) {
+        if ((this.isDead() || this.dead || this.getHealth() < 0.01)) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("death", false));
             return PlayState.CONTINUE;
-        }
-*/
+        }*/
+
         event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.mimic.idle", true));
         return PlayState.CONTINUE;
     }
@@ -66,5 +66,11 @@ public class MimicEntity extends MobEntity implements IAnimatable {
         return super.canSpawn(world, spawnReason);
     }
 
+
+   /* public static void spawnMimic(World world, BlockPos pos){
+        MimicEntity mimicEntity = EntityType.EntityFactory.create(world);
+        world.getBlockState(pos);
+        world.spawnEntity(mimicEntity);
+    }*/
 
 }
