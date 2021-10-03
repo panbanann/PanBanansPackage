@@ -1,7 +1,6 @@
 package panbanan.panbananspackage.items;
 
-import net.minecraft.item.SwordItem;
-import net.minecraft.item.ToolMaterial;
+import net.minecraft.item.*;
 
 public class MyItems extends SwordItem {
 

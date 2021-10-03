@@ -48,7 +48,6 @@ public class FieryGolemEntity extends GolemEntity implements IAnimatable {
         data.addAnimationController(new AnimationController(this, "controller", 0, this::predicate));
     }
 
-
     @Override
     public AnimationFactory getFactory()
     {
@@ -68,6 +67,13 @@ public class FieryGolemEntity extends GolemEntity implements IAnimatable {
         this.goalSelector.add(2, new IronGolemWanderAroundGoal(this, 0.9D));
         //}));
         super.initGoals();
+    }
+    @Override
+    protected void updatePostDeath() {
+        ++this.deathTime;
+        if (this.deathTime == 10) {
+            this.remove();
+        }
     }
 
     @Override

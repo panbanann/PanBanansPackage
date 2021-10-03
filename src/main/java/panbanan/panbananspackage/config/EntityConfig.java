@@ -39,8 +39,6 @@ public class EntityConfig {
 
     public static void configInit() throws IOException {
         File configFile = new File("config/entity_config.json");
-        //JsonParser parser = new JsonParser();
-
         Map<Object, Boolean> map = new HashMap<>();
         if (!configFile.exists()) {
             for (Object item : EntityIDs.entitySet()) {
@@ -52,9 +50,17 @@ public class EntityConfig {
         }
         if (configFile.exists()) {
             JsonObject json = getJsonObject(readFile(new File("config/entity_config.json")));
-            //JsonObject json = McdwBaseConfig.getJsonObject(McdwBaseConfig.readFile(new File("config/minecraft_dungeon_weapons/enchants_config.json5")));
-            for (Map.Entry<String, JsonElement> entry : json.entrySet()) {
-                newMap.put(entry.getKey(), entry.getValue().getAsBoolean());
+            if (json.size() <= EntityIDs.entitySet().size()) {
+                for (Map.Entry<String, JsonElement> entry : json.entrySet()) {
+                    if (!json.has(String.valueOf(entry))) {
+                        for (Object item : EntityIDs.entitySet()){
+                            map.put(item, true);
+                            String itemsJson = gson.toJson(map);
+                            Files.write(configFile.toPath(), itemsJson.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.WRITE);
+                        }
+                    }
+                    newMap.put(entry.getKey(), entry.getValue().getAsBoolean());
+                }
             }
 
         }

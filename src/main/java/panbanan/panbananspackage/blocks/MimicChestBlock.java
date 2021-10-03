@@ -3,64 +3,91 @@ package panbanan.panbananspackage.blocks;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.ChestBlock;
-import net.minecraft.block.entity.MobSpawnerBlockEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.mob.Monster;
+import net.minecraft.block.HorizontalFacingBlock;
+import net.minecraft.block.ShapeContext;
+import net.minecraft.entity.AreaEffectCloudEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.server.command.SummonCommand;
+import net.minecraft.particle.ParticleEffect;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.BooleanProperty;
+import net.minecraft.state.property.DirectionProperty;
+import net.minecraft.state.property.Properties;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.MobSpawnerLogic;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.Spawner;
-import panbanan.panbananspackage.PanBanansPackage;
-import panbanan.panbananspackage.entity.EntityIDs;
 import panbanan.panbananspackage.entity.EntityRegister;
 import panbanan.panbananspackage.entity.mobs.MimicEntity;
 
+import java.util.Random;
+
 public class MimicChestBlock extends Block {
 
-    //private Object MobEntity;
-
+    //public static final BooleanProperty DOFACE = BooleanProperty.of("spawnable");
+    public static final DirectionProperty FACING = HorizontalFacingBlock.FACING;
 
     public MimicChestBlock(FabricBlockSettings settings) {
         super(settings);
+        //setDefaultState(getStateManager().getDefaultState().with(SPAWNABLE, false));
+        setDefaultState(getStateManager().getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.NORTH));
+        //this.setDefaultState((BlockState)this.stateManager.getDefaultState()).with(FACING, Direction.NORTH);
     }
-    //public BlockPos positionX;
-    //public BlockPos positionY;
-    //public BlockPos positionZ;
+   @Override
+    protected void appendProperties(StateManager.Builder<Block, BlockState> stateManager) {
+        stateManager.add(Properties.HORIZONTAL_FACING);
+    }
+    @Override
+    public BlockState getPlacementState(ItemPlacementContext ctx) {
+        return this.getDefaultState().with(Properties.HORIZONTAL_FACING, ctx.getPlayerFacing().getOpposite());
+    }
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-
-        /*NbtCompound nbtCompound = nbt.copy();
-        nbtCompound.putString("id", entity.toString());
-        ServerWorld serverWorld = source.getWorld();
-        Entity entity2 = EntityType.loadEntityWithPassengers(nbtCompound, serverWorld, (entityx) -> {
-            entityx.refreshPositionAndAngles(pos.x, pos.y, pos.z, entityx.yaw, entityx.pitch);
-            return entityx;
-        });*/
-        //mimicEntity = new MimicEntity();
-        //MimicEntity mimicEntity = MimicEntity.create(world);
+        AreaEffectCloudEntity poofCloud = new AreaEffectCloudEntity(world, pos.getX(), pos.getY(), pos.getZ());
+        player.playSound(SoundEvents.BLOCK_CHEST_OPEN, 1.0F, 0.5F);
+        poofCloud.setRadius(2.0F);
+        poofCloud.setWaitTime(0);
+        poofCloud.setParticleType(ParticleTypes.EXPLOSION);
+        poofCloud.setDuration(0);
+        world.spawnEntity(poofCloud);
+        //world.addParticle(ParticleTypes.POOF, true, pos.getX() + getRandOffset(), pos.getY() + getRandOffset(), pos.getZ() + getRandOffset(), 0.0, 0.0, 0.0);
 
         if (!world.isClient) {
             player.sendMessage(new LiteralText("Hello, world!"), false);
-            player.playSound(SoundEvents.BLOCK_CHEST_OPEN, 1.0F, 0.5F);
             MimicEntity mimicEntity = EntityRegister.MIMIC.create(world);
-            //positionX = pos.getX();
+            mimicEntity.refreshPositionAndAngles(pos, 0, 180);
+            mimicEntity.setTarget(player);
             world.spawnEntity(mimicEntity);
-            //;
+            world.removeBlock(pos, false);
         }
+
         return ActionResult.SUCCESS;
     }
 
+    private double getRandOffset() {
+        return new Random().nextDouble() * 5 / 2;
+    }
+
+
+
+    /*if (!world.isClient) {
+            player.sendMessage(new LiteralText("Hello, world!"), false);
+            MimicEntity mimicEntity = EntityRegister.MIMIC.create(world);
+            mimicEntity.setPos(pos.getX(), pos.getY()+1, pos.getZ());
+            world.spawnEntity(mimicEntity);
+            mimicEntity.checkDespawn();
+        }*/
 }

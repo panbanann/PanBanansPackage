@@ -14,6 +14,7 @@ import net.minecraft.util.registry.Registry;
 import panbanan.panbananspackage.config.EntityConfig;
 import panbanan.panbananspackage.entity.mobs.FieryGolemEntity;
 import panbanan.panbananspackage.entity.mobs.MimicEntity;
+import panbanan.panbananspackage.entity.mobs.NiddhogEntity;
 
 import java.util.Map;
 
@@ -21,9 +22,11 @@ public class EntityRegister {
     //This class needs manual adding for each entity because of laziness. Add public static EntityType for every new model.
     public static EntityType<FieryGolemEntity> FIERY_GOLEM;
     public static EntityType<MimicEntity> MIMIC;
+    public static EntityType<NiddhogEntity> NIDDHOG;
     //This is map read from EnityConfig file
     public static final Map<String, Boolean> entityMap = EntityConfig.newMap;
     public static Item MIMIC_SPAWN_EGG = null;
+    public static Item NIDDHOG_SPAWN_EGG = null;
 
     public static void onInitialize() {
         //Looping through map, saving keys and values and check for entity to register exact entity. Not automatic, maybe in the future.
@@ -36,10 +39,16 @@ public class EntityRegister {
                 FabricDefaultAttributeRegistry.register(FIERY_GOLEM, FieryGolemEntity.createMobAttributes().add(EntityAttributes.GENERIC_MAX_HEALTH, 100.0D).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.3D).add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 0.7D).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 10.0D));
             }
             if ((entityID.equalsIgnoreCase("MIMIC")) && isEnabled) {
-                MIMIC = Registry.register(Registry.ENTITY_TYPE, new Identifier("panbananspackage", "mimic"), FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, MimicEntity::new).dimensions(EntityDimensions.fixed(0.5f, 1.1f)).build());
-                FabricDefaultAttributeRegistry.register(MIMIC, FieryGolemEntity.createMobAttributes().add(EntityAttributes.GENERIC_MAX_HEALTH, 80.0D).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.3D).add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 0.6D).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 8.0D));
+                MIMIC = Registry.register(Registry.ENTITY_TYPE, new Identifier("panbananspackage", "mimic"), FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, MimicEntity::new).dimensions(EntityDimensions.fixed(1.1f, 1.1f)).build());
+                FabricDefaultAttributeRegistry.register(MIMIC, MimicEntity.createMobAttributes().add(EntityAttributes.GENERIC_MAX_HEALTH, 80.0D).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.3D).add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 0.6D).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 8.0D));
                 MIMIC_SPAWN_EGG = new SpawnEggItem(MIMIC, 12895428, 11382189, new Item.Settings().group(ItemGroup.MISC));
                 Registry.register(Registry.ITEM, new Identifier("panbananspackage", "mimic_egg"),MIMIC_SPAWN_EGG);
+            }
+            if ((entityID.equalsIgnoreCase("NIDDHOG")) && isEnabled) {
+                NIDDHOG = Registry.register(Registry.ENTITY_TYPE, new Identifier("panbananspackage", "niddhog"), FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, NiddhogEntity::new).dimensions(EntityDimensions.fixed(2.0f, 2.0f)).build());
+                FabricDefaultAttributeRegistry.register(NIDDHOG, NiddhogEntity.createMobAttributes().add(EntityAttributes.GENERIC_MAX_HEALTH, 100.0D).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.4D).add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 0.9D).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 10.0D));
+                NIDDHOG_SPAWN_EGG = new SpawnEggItem(NIDDHOG, 12545428, 11354189, new Item.Settings().group(ItemGroup.MISC));
+                Registry.register(Registry.ITEM, new Identifier("panbananspackage", "niddhog_egg"),NIDDHOG_SPAWN_EGG);
             }
 
         }

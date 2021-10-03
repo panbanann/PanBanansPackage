@@ -29,6 +29,5 @@ public class PanBanansPackage implements ModInitializer {
         GeckoLib.initialize();
         BlockRegistry.blockInit();
         EntityRegister.onInitialize();
-
     }
 }

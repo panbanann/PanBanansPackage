@@ -11,4 +11,9 @@ public class MimicEntityRenderer extends GeoEntityRenderer<MimicEntity> {
         super(renderManager, new MimicModel());
         this.shadowRadius = 0.35F; //change 0.7 to the desired shadow size.
     }
+
+    @Override
+    protected float getDeathMaxRotation(MimicEntity entityLivingBaseIn) {
+        return 0.0f;
+    }
 }

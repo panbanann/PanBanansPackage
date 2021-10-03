@@ -1,6 +1,9 @@
 {
   "variants": {
-    "": { "model": "panbananspackage:block/m_chest_block" }
+    "facing=north": { "model": "panbananspackage:block/m_chest_block", "uvlock": true },
+    "facing=east": { "model": "panbananspackage:block/m_chest_block", "y": 90, "uvlock": false },
+    "facing=south": { "model": "panbananspackage:block/m_chest_block", "y": 180, "uvlock": false },
+    "facing=west": { "model": "panbananspackage:block/m_chest_block", "y": 270, "uvlock": false }
   }
 }
 

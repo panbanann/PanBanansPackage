@@ -8,6 +8,7 @@ public class EntityIDs {
         Set<String> entitySet = new HashSet<>();
         entitySet.add("fiery_golem");
         entitySet.add("mimic");
+        entitySet.add("niddhog");
         return  entitySet;
     }
 }
