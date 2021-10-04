@@ -1,5 +1,7 @@
 package panbanan.panbananspackage.entity.mobs;
 
+import net.minecraft.entity.EntityDimensions;
+import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.*;
@@ -34,15 +36,15 @@ public class NiddhogEntity extends HostileEntity implements IAnimatable {
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event)
     {
         if (event.isMoving() || this.getMovementSpeed() > 0.0F){
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("walking", true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", true));
             return PlayState.CONTINUE;
         }
-        /*if ((this.dead || this.getHealth() < 0.01)) {
+        if ((this.dead || this.getHealth() < 0.01)) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("death", false));
             return PlayState.CONTINUE;
-        }*/
+        }
 
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("walking", false));
+        event.getController().setAnimation(new AnimationBuilder().addAnimation("idle", true));
         return PlayState.CONTINUE;
     }
 
@@ -67,6 +69,10 @@ public class NiddhogEntity extends HostileEntity implements IAnimatable {
     @Override
     protected SoundEvent getDeathSound(){
         return SoundEvents.ENTITY_ENDER_DRAGON_HURT;
+    }
+    @Override
+    protected float getActiveEyeHeight(EntityPose pose, EntityDimensions dimensions) {
+        return 2.55F;
     }
 
     @Override
