@@ -8,7 +8,7 @@ public class NiddhogEntityRenderer extends GeoEntityRenderer<NiddhogEntity> {
 
     public NiddhogEntityRenderer(EntityRenderDispatcher renderManager) {
         super(renderManager, new NiddhogModel());
-        this.shadowRadius = 0.35F;
+        this.shadowRadius = 2.5F;
     }
     @Override
     protected float getDeathMaxRotation(NiddhogEntity entityLivingBaseIn) {

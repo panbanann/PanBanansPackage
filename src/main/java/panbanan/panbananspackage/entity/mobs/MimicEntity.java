@@ -31,7 +31,7 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import java.util.EnumSet;
-
+//TODO change the entity type or remove randomness of health and size
 public class MimicEntity extends SlimeEntity implements IAnimatable {
 
     private final AnimationFactory factory = new AnimationFactory(this);
@@ -52,6 +52,7 @@ public class MimicEntity extends SlimeEntity implements IAnimatable {
             return PlayState.CONTINUE;
         }
 
+        //TODO dashing animation and ability
 
         if ((this.isDead() || this.dead || this.getHealth() < 0.01)) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.mimic.death", false));
@@ -76,13 +77,14 @@ public class MimicEntity extends SlimeEntity implements IAnimatable {
 //MobEntity Overrides//
     @Override
     protected void initGoals() {
-
-        super.initGoals();
-        /*this.goalSelector.add(1, new MimicEntity.FaceTowardTargetGoal(this));
-        this.goalSelector.add(2, new MimicEntity.MoveGoal(this));
-        this.targetSelector.add(3, new FollowTargetGoal(this, PlayerEntity.class, true));*/
+        this.goalSelector.add(1, new MimicEntity.FaceTowardTargetGoal(this));
+        //this.goalSelector.add(2, new MimicEntity.MoveGoal(this));
+        this.targetSelector.add(3, new FollowTargetGoal(this, PlayerEntity.class, true));
         //this.goalSelector.add(4, new );
+        super.initGoals();
     }
+
+    //TODO adding spawn rule to always face player on spawn.
 
     @Override
     public boolean canPickupItem(ItemStack stack) {
@@ -215,6 +217,7 @@ public class MimicEntity extends SlimeEntity implements IAnimatable {
     }
 
 // Mimic Media //
+    //TODO change the sound effect for more woodlike instead of slime.
     protected SoundEvent getJumpSound() {
         return SoundEvents.ENTITY_SLIME_JUMP;
     }
@@ -236,6 +239,7 @@ public class MimicEntity extends SlimeEntity implements IAnimatable {
     }
 
 // Mimic movement control //
+    //TODO learn how to make the movement correctly without using slimeEntity as extend.
    static class MimicMoveControl extends MoveControl {
        private float targetYaw;
        private int ticksUntilJump;

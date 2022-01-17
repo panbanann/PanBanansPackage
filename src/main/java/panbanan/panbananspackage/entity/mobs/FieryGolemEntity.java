@@ -1,20 +1,29 @@
 package panbanan.panbananspackage.entity.mobs;
 
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.SpawnRestriction;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.passive.GolemEntity;
+import net.minecraft.entity.passive.MooshroomEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.Animation;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+
+import java.util.Random;
 
 public class FieryGolemEntity extends GolemEntity implements IAnimatable {
 
@@ -27,12 +36,16 @@ public class FieryGolemEntity extends GolemEntity implements IAnimatable {
         this.stepHeight = 1.0F;
     }
 
+
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event)
     {
+
+        //TODO change the moving animations to be nicer and match move speed.
         if (event.isMoving()){
             event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", true));
             return PlayState.CONTINUE;
         }
+        //TODO fix death animation
         if ((this.dead || this.getHealth() < 0.01)) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("death", false));
             return PlayState.CONTINUE;
@@ -54,6 +67,7 @@ public class FieryGolemEntity extends GolemEntity implements IAnimatable {
         return this.factory;
     }
 
+
     @Override
     protected void initGoals() {
         this.goalSelector.add(6, new LookAtEntityGoal(this, PlayerEntity.class, 10.0F));
@@ -68,6 +82,9 @@ public class FieryGolemEntity extends GolemEntity implements IAnimatable {
         //}));
         super.initGoals();
     }
+
+    //TODO find some sort ability that golem can use and animate it.
+
     @Override
     protected void updatePostDeath() {
         ++this.deathTime;
@@ -75,7 +92,6 @@ public class FieryGolemEntity extends GolemEntity implements IAnimatable {
             this.remove();
         }
     }
-
     @Override
     protected SoundEvent getAmbientSound(){
         return SoundEvents.ENTITY_IRON_GOLEM_STEP;
@@ -88,4 +104,11 @@ public class FieryGolemEntity extends GolemEntity implements IAnimatable {
     protected SoundEvent getDeathSound(){
         return SoundEvents.ENTITY_IRON_GOLEM_DEATH;
     }
+
+    public static boolean canSpawn(EntityType<FieryGolemEntity> type, WorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
+        return world.getBlockState(pos.down()).isOf(Blocks.MYCELIUM) && world.getBaseLightLevel(pos, 0) > 8;
+    }
+
+
+
 }

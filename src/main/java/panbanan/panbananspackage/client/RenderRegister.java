@@ -3,6 +3,7 @@ package panbanan.panbananspackage.client;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
 import panbanan.panbananspackage.entity.EntityRegister;
 import panbanan.panbananspackage.entity.mobs.FieryGolemEntityRenderer;
+import panbanan.panbananspackage.entity.mobs.GhoulEntityRenderer;
 import panbanan.panbananspackage.entity.mobs.MimicEntityRenderer;
 import panbanan.panbananspackage.entity.mobs.NiddhogEntityRenderer;
 import panbanan.panbananspackage.items.armors.ArmorSet;
@@ -16,6 +17,8 @@ public class RenderRegister {
         EntityRendererRegistry.INSTANCE.register(EntityRegister.FIERY_GOLEM, (dispatcher, context) -> new FieryGolemEntityRenderer(dispatcher));
         EntityRendererRegistry.INSTANCE.register(EntityRegister.MIMIC, (dispatcher, context) -> new MimicEntityRenderer(dispatcher));
         EntityRendererRegistry.INSTANCE.register(EntityRegister.NIDDHOG, (dispatcher, context) -> new NiddhogEntityRenderer(dispatcher));
+        EntityRendererRegistry.INSTANCE.register(EntityRegister.GHOUL, (dispatcher, context) -> new GhoulEntityRenderer(dispatcher));
+
 
         //Armors render registry
         GeoArmorRenderer.registerArmorRenderer(ArmorSet.class, new PotatoRenderer());

@@ -9,6 +9,7 @@ public class EntityIDs {
         entitySet.add("fiery_golem");
         entitySet.add("mimic");
         entitySet.add("niddhog");
+        entitySet.add("ghoul");
         return  entitySet;
     }
 }
