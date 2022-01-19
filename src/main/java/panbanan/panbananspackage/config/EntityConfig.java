@@ -2,7 +2,7 @@ package panbanan.panbananspackage.config;
 
 import com.google.gson.*;
 import panbanan.panbananspackage.entity.EntityIDs;
-import sun.security.util.Debug;
+//import sun.security.util.Debug;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -50,14 +50,14 @@ public class EntityConfig {
             }
             String itemsJson = gson.toJson(map);
             Files.write(configFile.toPath(), itemsJson.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.WRITE);
-            Debug.println(debug, "Config was created as it didn't exist.");
+            //Debug.println(debug, "Config was created as it didn't exist.");
         }
         if (configFile.exists()) {
-            Debug.println(debug, "Config existed before.");
+            //Debug.println(debug, "Config existed before.");
             JsonObject json = getJsonObject(readFile(new File("config/entity_config.json")));
             String itemToString = "name";
             if(json.size() < EntityIDs.entitySet().size()){
-                Debug.println(debug, "json was smaller than setsize.");
+                //Debug.println(debug, "json was smaller than setsize.");
                 for (Object item : EntityIDs.entitySet()) {
                     itemToString = item.toString();
                         if (!json.has(itemToString)) {
@@ -65,14 +65,14 @@ public class EntityConfig {
                             map.put(itemToString, true);
                         }else {
                             for (Map.Entry<String, JsonElement> entry : json.entrySet()) {
-                                Debug.println(debug, "for each entry in json entryset entry is " + entry.getKey() + " and value " + entry.getValue());
+                                //Debug.println(debug, "for each entry in json entryset entry is " + entry.getKey() + " and value " + entry.getValue());
                                 newMap.put(entry.getKey(), entry.getValue().getAsBoolean());
                             }
                         }
                 }
             } else {
                 for (Map.Entry<String, JsonElement> entry : json.entrySet()) {
-                    Debug.println(debug,"jsonSize was not smaller than IDs");
+                    //Debug.println(debug,"jsonSize was not smaller than IDs");
                     newMap.put(entry.getKey(), entry.getValue().getAsBoolean());
                 }
             }

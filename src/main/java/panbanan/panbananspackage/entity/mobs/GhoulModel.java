@@ -1,6 +1,5 @@
 package panbanan.panbananspackage.entity.mobs;
 
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Identifier;
 import panbanan.panbananspackage.PanBanansPackage;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -9,6 +8,7 @@ import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.data.EntityModelData;
 
+@SuppressWarnings("rawtypes")
 public class GhoulModel extends AnimatedGeoModel {
 
     @Override
@@ -27,14 +27,15 @@ public class GhoulModel extends AnimatedGeoModel {
     }
 
     @Override
-    public void setLivingAnimations(IAnimatable entity, Integer uniqueID, AnimationEvent customPredicate) {
-        super.setLivingAnimations(entity, uniqueID, customPredicate);
+    public void setLivingAnimations(Object entity, Integer integer, AnimationEvent animationEvent) {
+        super.setLivingAnimations((IAnimatable) entity, integer, animationEvent);
         IBone head = this.getAnimationProcessor().getBone("head");
 
-        LivingEntity entityIn = (LivingEntity) entity;
-        EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
-        head.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
-        head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
+        EntityModelData extraData = (EntityModelData) animationEvent.getExtraDataOfType(EntityModelData.class).get(0);
+        if (head != null) {
+            head.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
+            head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
+        }
     }
 
     @Override

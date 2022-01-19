@@ -15,6 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.Animation;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -75,7 +76,7 @@ public class FieryGolemEntity extends GolemEntity implements IAnimatable {
         this.goalSelector.add(4, new WanderNearTargetGoal(this, 0.9D, 32.0F));
         this.goalSelector.add(5, new LookAroundGoal(this));
         //this.targetSelector.add(2, new RevengeGoal(this, new Class[0]));
-        this.targetSelector.add(3, new FollowTargetGoal(this, PlayerEntity.class, true));
+        //this.targetSelector.add(3, new FollowTargetGoal(this, PlayerEntity.class, true));
         //this.targetSelector.add(3, new FollowTargetGoal(this, MobEntity.class, 5, false, false, (livingEntity) -> {
         //    return livingEntity instanceof Monster && !(livingEntity instanceof CreeperEntity);
         this.goalSelector.add(2, new IronGolemWanderAroundGoal(this, 0.9D));
@@ -89,7 +90,7 @@ public class FieryGolemEntity extends GolemEntity implements IAnimatable {
     protected void updatePostDeath() {
         ++this.deathTime;
         if (this.deathTime == 10) {
-            this.remove();
+            this.remove(RemovalReason.DISCARDED);
         }
     }
     @Override

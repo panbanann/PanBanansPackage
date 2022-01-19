@@ -1,6 +1,5 @@
 package panbanan.panbananspackage.entity.mobs;
 
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Identifier;
 import panbanan.panbananspackage.PanBanansPackage;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -9,6 +8,7 @@ import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.data.EntityModelData;
 
+@SuppressWarnings("rawtypes")
 public class MimicModel extends AnimatedGeoModel {
 
     @Override
@@ -29,5 +29,16 @@ public class MimicModel extends AnimatedGeoModel {
         return new Identifier("panbananspackage", "animations/mimic.animation.json");
     }
 
+    @Override
+    public void setLivingAnimations(Object entity, Integer integer, AnimationEvent animationEvent) {
+        super.setLivingAnimations((IAnimatable) entity, integer, animationEvent);
+        IBone head = this.getAnimationProcessor().getBone("head");
+
+        EntityModelData extraData = (EntityModelData) animationEvent.getExtraDataOfType(EntityModelData.class).get(0);
+        if (head != null) {
+            head.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
+            head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
+        }
+    }
 
 }

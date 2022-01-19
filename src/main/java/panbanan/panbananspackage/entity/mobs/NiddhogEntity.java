@@ -32,7 +32,7 @@ public class NiddhogEntity extends HostileEntity implements IAnimatable {
         super(entityType, world);
         this.ignoreCameraFrustum = true;
         this.stepHeight = 1.0F;
-        this.moveControl = new FlightMoveControl(this, 10, false);
+        //this.moveControl = new FlightMoveControl(this, 10, false);
     }
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event)
@@ -81,7 +81,7 @@ public class NiddhogEntity extends HostileEntity implements IAnimatable {
 
     @Override //TODO fix the goals priority so the mob is not dancing like weirdo
     protected void initGoals() {
-        this.targetSelector.add(1, new FollowTargetGoal(this, PlayerEntity.class, true));
+        //this.targetSelector.add(1, new FollowTargetGoal(this, PlayerEntity.class, true));
         this.goalSelector.add(2, new NiddhogEntity.AttackGoal());
 
         this.goalSelector.add(5, new WanderAroundFarGoal(this, 0.4D));

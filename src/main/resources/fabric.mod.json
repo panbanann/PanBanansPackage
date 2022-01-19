@@ -12,19 +12,23 @@
   "icon": " ",
   "environment": "*",
   "entrypoints": {
-    "client": [
-      "panbanan.panbananspackage.client.PanBanansPackageClient"
-    ],
     "main": [
       "panbanan.panbananspackage.PanBanansPackage"
+    ],
+    "client": [
+      "panbanan.panbananspackage.client.PanBanansPackageClient"
     ]
   },
   "mixins": [
     "panbananspackage.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.11.6",
+    "fabricloader": ">=0.4.0",
     "fabric": "*",
-    "minecraft": "1.16.5"
+    "java": ">=17",
+    "minecraft": "1.18.x"
+  },
+  "suggests": {
+    "another-mod": "*"
   }
 }

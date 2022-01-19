@@ -4,30 +4,19 @@ import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalFacingBlock;
-import net.minecraft.block.ShapeContext;
 import net.minecraft.entity.AreaEffectCloudEntity;
-import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
-import net.minecraft.text.LiteralText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.registry.RegistryKey;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import panbanan.panbananspackage.entity.EntityRegister;
 import panbanan.panbananspackage.entity.mobs.MimicEntity;
@@ -68,7 +57,6 @@ public class MimicChestBlock extends Block {
         //world.addParticle(ParticleTypes.POOF, true, pos.getX() + getRandOffset(), pos.getY() + getRandOffset(), pos.getZ() + getRandOffset(), 0.0, 0.0, 0.0);
 
         if (!world.isClient) {
-            player.sendMessage(new LiteralText("Hello, world!"), false);
             MimicEntity mimicEntity = EntityRegister.MIMIC.create(world);
             mimicEntity.refreshPositionAndAngles(pos, 0, 180);
             mimicEntity.setTarget(player);

@@ -1,17 +1,30 @@
 package panbanan.panbananspackage.entity.mobs;
 
-import net.minecraft.client.render.entity.EntityRenderDispatcher;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
-import software.bernie.geckolib3.renderer.geo.GeoEntityRenderer;
+import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.entity.EntityRendererFactory;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
+import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 public class NiddhogEntityRenderer extends GeoEntityRenderer<NiddhogEntity> {
 
-    public NiddhogEntityRenderer(EntityRenderDispatcher renderManager) {
-        super(renderManager, new NiddhogModel());
-        this.shadowRadius = 2.5F;
+    public NiddhogEntityRenderer(EntityRendererFactory.Context ctx) {
+        super(ctx, new NiddhogModel());
+        this.shadowRadius = 0.35F; //change 0.7 to the desired shadow size.
     }
+
     @Override
-    protected float getDeathMaxRotation(NiddhogEntity entityLivingBaseIn) {
-        return 0.0f;
+    public RenderLayer getRenderType(NiddhogEntity animatable, float partialTicks, MatrixStack stack,
+                                     @Nullable VertexConsumerProvider renderTypeBuffer, @Nullable VertexConsumer vertexBuilder,
+                                     int packedLightIn, Identifier textureLocation) {
+        return RenderLayer.getEntityTranslucent(this.getTextureLocation(animatable));
     }
+
+    //@Override
+    //protected float getDeathMaxRotation(NiddhogEntity entityLivingBaseIn) {
+        //return 0.0f;
+    //}
 }

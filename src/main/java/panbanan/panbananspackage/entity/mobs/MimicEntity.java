@@ -4,12 +4,9 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.control.MoveControl;
-import net.minecraft.entity.ai.goal.FollowTargetGoal;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.LookAtEntityGoal;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.SlimeEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -17,9 +14,7 @@ import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.MobSpawnerEntry;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -77,9 +72,9 @@ public class MimicEntity extends SlimeEntity implements IAnimatable {
 //MobEntity Overrides//
     @Override
     protected void initGoals() {
-        this.goalSelector.add(1, new MimicEntity.FaceTowardTargetGoal(this));
+        //this.goalSelector.add(1, new MimicEntity.FaceTowardTargetGoal(this));
         //this.goalSelector.add(2, new MimicEntity.MoveGoal(this));
-        this.targetSelector.add(3, new FollowTargetGoal(this, PlayerEntity.class, true));
+        //this.targetSelector.add(3, new FollowTargetGoal(this, PlayerEntity.class, true));
         //this.goalSelector.add(4, new );
         super.initGoals();
     }
@@ -100,7 +95,7 @@ public class MimicEntity extends SlimeEntity implements IAnimatable {
     protected void updatePostDeath() {
         ++this.deathTime;
         if (this.deathTime == 20) {
-            this.remove();
+            this.remove(RemovalReason.KILLED);
         }
     }
 
@@ -172,7 +167,7 @@ public class MimicEntity extends SlimeEntity implements IAnimatable {
         }*/
     }
 
-    static class FaceTowardTargetGoal extends Goal {
+    /*static class FaceTowardTargetGoal extends Goal {
         private final MimicEntity mimic;
         private int ticksLeft;
 
@@ -214,7 +209,7 @@ public class MimicEntity extends SlimeEntity implements IAnimatable {
             this.mimic.lookAtEntity(this.mimic.getTarget(), 10.0F, 10.0F);
             ((MimicEntity.MimicMoveControl)this.mimic.getMoveControl()).look(this.mimic.yaw, this.mimic.canAttack());
         }
-    }
+    }*/
 
 // Mimic Media //
     //TODO change the sound effect for more woodlike instead of slime.
@@ -240,7 +235,7 @@ public class MimicEntity extends SlimeEntity implements IAnimatable {
 
 // Mimic movement control //
     //TODO learn how to make the movement correctly without using slimeEntity as extend.
-   static class MimicMoveControl extends MoveControl {
+   /*static class MimicMoveControl extends MoveControl {
        private float targetYaw;
        private int ticksUntilJump;
        private final MimicEntity mimic;
@@ -293,6 +288,6 @@ public class MimicEntity extends SlimeEntity implements IAnimatable {
 
            }
        }
-   }
+   }*/
 
 }
