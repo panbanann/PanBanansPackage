@@ -12,14 +12,10 @@ public class LootIdObtainer {
 
     public Identifier ObtainLootId() {
         System.out.println(chestLootId.toString() + " is a chestLootId on entry ObtainLootId().");
-        LootableContainerBlockEntityAccessor tableAccess = ((LootableContainerBlockEntityAccessor) getLootIdObtainer());
+        LootableContainerBlockEntityAccessor tableAccess = ((LootableContainerBlockEntityAccessor) this);
         chestLootId = tableAccess.getLootTableId();
         System.out.println(chestLootId.toString() + " is a chestLootId on exit of ObtainLootId().");
         return chestLootId;
     }
 
-    @Nullable
-    private LootIdObtainer getLootIdObtainer() {
-        return this;
-    }
 }
