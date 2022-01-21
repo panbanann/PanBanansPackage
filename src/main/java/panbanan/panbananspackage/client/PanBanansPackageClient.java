@@ -8,11 +8,9 @@ import panbanan.panbananspackage.entity.mobs.GhoulEntityRenderer;
 import panbanan.panbananspackage.entity.mobs.MimicEntityRenderer;
 import panbanan.panbananspackage.entity.mobs.NiddhogEntityRenderer;
 import panbanan.panbananspackage.items.ItemRegistry;
-import panbanan.panbananspackage.items.armors.ArmorSet;
 import panbanan.panbananspackage.items.models.PotatoRenderer;
 import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
 
-import java.security.Key;
 
 @SuppressWarnings("deprecation")
 @net.fabricmc.api.Environment(net.fabricmc.api.EnvType.CLIENT)

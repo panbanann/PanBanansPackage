@@ -3,6 +3,7 @@ package panbanan.panbananspackage.blocks;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.ChestBlock;
 import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.entity.AreaEffectCloudEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -23,6 +24,7 @@ import panbanan.panbananspackage.entity.mobs.MimicEntity;
 
 import java.util.Random;
 //TODO try to extend chest and make the block render as regular chest instead of model
+//TODO Mixin for the ChestBlock onUse to spawn Mimic
 public class MimicChestBlock extends Block {
 
     //public static final BooleanProperty DOFACE = BooleanProperty.of("spawnable");
