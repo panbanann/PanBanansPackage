@@ -27,6 +27,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import java.util.EnumSet;
 //TODO change the entity type or remove randomness of health and size
+
 public class MimicEntity extends SlimeEntity implements IAnimatable {
 
     private final AnimationFactory factory = new AnimationFactory(this);
@@ -72,8 +73,8 @@ public class MimicEntity extends SlimeEntity implements IAnimatable {
 //MobEntity Overrides//
     @Override
     protected void initGoals() {
-        //this.goalSelector.add(1, new MimicEntity.FaceTowardTargetGoal(this));
-        //this.goalSelector.add(2, new MimicEntity.MoveGoal(this));
+        this.goalSelector.add(1, new MimicEntity.FaceTowardTargetGoal(this));
+        this.goalSelector.add(2, new MimicEntity.MoveGoal(this));
         //this.targetSelector.add(3, new FollowTargetGoal(this, PlayerEntity.class, true));
         //this.goalSelector.add(4, new );
         super.initGoals();
@@ -107,6 +108,7 @@ public class MimicEntity extends SlimeEntity implements IAnimatable {
 //Endof Overrides//
 
 // Mimic Methods //
+    //TODO fix walking
     protected boolean canAttack() {
         return true;
     }
@@ -167,7 +169,7 @@ public class MimicEntity extends SlimeEntity implements IAnimatable {
         }*/
     }
 
-    /*static class FaceTowardTargetGoal extends Goal {
+    static class FaceTowardTargetGoal extends Goal {
         private final MimicEntity mimic;
         private int ticksLeft;
 
@@ -183,7 +185,7 @@ public class MimicEntity extends SlimeEntity implements IAnimatable {
             } else if (!livingEntity.isAlive()) {
                 return false;
             } else {
-                return livingEntity instanceof PlayerEntity && ((PlayerEntity)livingEntity).abilities.invulnerable ? false : this.mimic.getMoveControl() instanceof MimicEntity.MimicMoveControl;
+                return livingEntity instanceof PlayerEntity && ((PlayerEntity)livingEntity).getAbilities().invulnerable ? false : this.mimic.getMoveControl() instanceof MimicEntity.MimicMoveControl;
             }
         }
 
@@ -198,7 +200,7 @@ public class MimicEntity extends SlimeEntity implements IAnimatable {
                 return false;
             } else if (!livingEntity.isAlive()) {
                 return false;
-            } else if (livingEntity instanceof PlayerEntity && ((PlayerEntity)livingEntity).abilities.invulnerable) {
+            } else if (livingEntity instanceof PlayerEntity && ((PlayerEntity)livingEntity).getAbilities().invulnerable) {
                 return false;
             } else {
                 return --this.ticksLeft > 0;
@@ -207,9 +209,9 @@ public class MimicEntity extends SlimeEntity implements IAnimatable {
 
         public void tick() {
             this.mimic.lookAtEntity(this.mimic.getTarget(), 10.0F, 10.0F);
-            ((MimicEntity.MimicMoveControl)this.mimic.getMoveControl()).look(this.mimic.yaw, this.mimic.canAttack());
+            ((MimicEntity.MimicMoveControl)this.mimic.getMoveControl()).look(this.mimic.getYaw(), this.mimic.canAttack());
         }
-    }*/
+    }
 
 // Mimic Media //
     //TODO change the sound effect for more woodlike instead of slime.
@@ -235,16 +237,17 @@ public class MimicEntity extends SlimeEntity implements IAnimatable {
 
 // Mimic movement control //
     //TODO learn how to make the movement correctly without using slimeEntity as extend.
-   /*static class MimicMoveControl extends MoveControl {
+   static class MimicMoveControl extends MoveControl {
        private float targetYaw;
        private int ticksUntilJump;
        private final MimicEntity mimic;
        private boolean jumpOften;
 
+
        public MimicMoveControl(MimicEntity mimic) {
            super(mimic);
            this.mimic = mimic;
-           this.targetYaw = 180.0F * mimic.yaw / 3.1415927F;
+           this.targetYaw = 180.0F * mimic.getYaw() / 3.1415927F;
        }
 
        public void look(float targetYaw, boolean jumpOften) {
@@ -258,9 +261,9 @@ public class MimicEntity extends SlimeEntity implements IAnimatable {
        }
 
        public void tick() {
-           this.entity.yaw = this.wrapDegrees(this.entity.yaw, this.targetYaw, 90.0F);
-           this.entity.headYaw = this.entity.yaw;
-           this.entity.bodyYaw = this.entity.yaw;
+           this.entity.setYaw(this.wrapDegrees(this.entity.getYaw(), this.targetYaw, 90.0F));
+           this.entity.headYaw = this.entity.getYaw();
+           this.entity.bodyYaw = this.entity.getYaw();
            if (this.state != MoveControl.State.MOVE_TO) {
                this.entity.setForwardSpeed(0.0F);
            } else {
@@ -288,6 +291,6 @@ public class MimicEntity extends SlimeEntity implements IAnimatable {
 
            }
        }
-   }*/
+   }
 
 }

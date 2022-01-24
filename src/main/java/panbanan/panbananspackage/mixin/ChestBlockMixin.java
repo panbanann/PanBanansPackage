@@ -26,17 +26,16 @@ import java.util.Random;
 @Mixin(ChestBlock.class)
 public abstract class ChestBlockMixin {
     public Random rand = new Random();
-
+    //TODO prevent destroying chests when the lootcrates is installed.
+    //TODO save the loottable information and give loot on kill plus extra
     @Inject(method = "onUse", at = @At("HEAD"), cancellable = true)
     public void onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> cir) {
         int int_random = rand.nextInt(100);
-        //System.out.println("The block was used.");
         BlockEntity chestBlockEntity = world.getBlockEntity(pos);
         LootableContainerBlockEntityAccessor tableAccess = ((LootableContainerBlockEntityAccessor) chestBlockEntity);
         @Nullable
         Identifier lootTableId = tableAccess.getLootTableId();
         if (lootTableId != null && int_random<=9) {
-            //System.out.println("ChestLootId wasn't null.");
             AreaEffectCloudEntity poofCloud = new AreaEffectCloudEntity(world, pos.getX(), pos.getY(), pos.getZ());
             player.playSound(SoundEvents.BLOCK_CHEST_OPEN, 1.0F, 0.5F);
             poofCloud.setRadius(10.0F);
