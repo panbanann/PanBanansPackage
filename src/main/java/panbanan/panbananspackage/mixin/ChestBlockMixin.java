@@ -13,7 +13,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -26,6 +25,9 @@ import java.util.Random;
 @Mixin(ChestBlock.class)
 public abstract class ChestBlockMixin {
     public Random rand = new Random();
+    public Identifier chestLoot;
+    private Identifier lootTableId;
+
     //TODO prevent destroying chests when the lootcrates is installed.
     //TODO save the loottable information and give loot on kill plus extra
     @Inject(method = "onUse", at = @At("HEAD"), cancellable = true)
@@ -33,8 +35,9 @@ public abstract class ChestBlockMixin {
         int int_random = rand.nextInt(100);
         BlockEntity chestBlockEntity = world.getBlockEntity(pos);
         LootableContainerBlockEntityAccessor tableAccess = ((LootableContainerBlockEntityAccessor) chestBlockEntity);
-        @Nullable
-        Identifier lootTableId = tableAccess.getLootTableId();
+        lootTableId = tableAccess.getLootTableId();
+        //LootTable lootTable = world.getServer().getLootManager().getTable(lootTableId);
+
         if (lootTableId != null && int_random<=9) {
             AreaEffectCloudEntity poofCloud = new AreaEffectCloudEntity(world, pos.getX(), pos.getY(), pos.getZ());
             player.playSound(SoundEvents.BLOCK_CHEST_OPEN, 1.0F, 0.5F);
@@ -45,6 +48,8 @@ public abstract class ChestBlockMixin {
             world.spawnEntity(poofCloud);
             if (!world.isClient) {
                 MimicEntity mimicEntity = EntityRegister.MIMIC.create(world);
+                mimicEntity.lookAtEntity(player, 0, 0);
+                //mimicEntity.getChestLoot(lootTableId);
                 mimicEntity.refreshPositionAndAngles(pos, 0, 180);
                 mimicEntity.setTarget(player);
                 world.spawnEntity(mimicEntity);

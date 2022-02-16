@@ -1,22 +1,31 @@
 package panbanan.panbananspackage.entity.mobs;
 
+import net.minecraft.block.ChestBlock;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.control.MoveControl;
+import net.minecraft.entity.ai.goal.ActiveTargetGoal;
 import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.ai.goal.PounceAtTargetGoal;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.mob.SlimeEntity;
+import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
+import panbanan.panbananspackage.mixin.ChestBlockMixin;
+import panbanan.panbananspackage.mixin.LootableContainerBlockEntityAccessor;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -28,16 +37,14 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import java.util.EnumSet;
 //TODO change the entity type or remove randomness of health and size
 
-public class MimicEntity extends SlimeEntity implements IAnimatable {
+public class MimicEntity extends MobEntity implements Monster, IAnimatable {
 
     private final AnimationFactory factory = new AnimationFactory(this);
-    public float targetStretch;
-    public float stretch;
-    public float lastStretch;
-    private boolean onGroundLastTick;
 
-    public MimicEntity(EntityType<? extends SlimeEntity> type, World worldIn){
-        super(type, worldIn);
+
+    public MimicEntity(EntityType<? extends MimicEntity> entityType, World worldIn){
+        super((EntityType<? extends MobEntity>)entityType, worldIn);
+        this.moveControl = new MimicEntity.MimicMoveControl(this);
         this.ignoreCameraFrustum = true;
     }
 // Animation control //
@@ -70,13 +77,13 @@ public class MimicEntity extends SlimeEntity implements IAnimatable {
     }
 //Endof Animation Control//
 
-//MobEntity Overrides//
     @Override
     protected void initGoals() {
-        this.goalSelector.add(1, new MimicEntity.FaceTowardTargetGoal(this));
-        this.goalSelector.add(2, new MimicEntity.MoveGoal(this));
-        //this.targetSelector.add(3, new FollowTargetGoal(this, PlayerEntity.class, true));
-        //this.goalSelector.add(4, new );
+        this.goalSelector.add(2, new MimicEntity.FaceTowardTargetGoal(this));
+        this.goalSelector.add(3, new MimicEntity.MoveGoal(this));
+        this.targetSelector.add(1, new ActiveTargetGoal<PlayerEntity>(this, PlayerEntity.class, 10, true, false, livingEntity -> Math.abs(livingEntity.getY() - this.getY()) <= 4.0));
+        this.targetSelector.add(3, new ActiveTargetGoal<IronGolemEntity>((MobEntity)this, IronGolemEntity.class, true));
+        this.goalSelector.add(3, new PounceAtTargetGoal(this, 0.4f));
         super.initGoals();
     }
 
@@ -100,58 +107,46 @@ public class MimicEntity extends SlimeEntity implements IAnimatable {
         }
     }
 
-    /*@Override
-    public void checkDespawn(){
-        this.despawnCounter = 0;
-        this.cannotDespawn();
-    }*/
-//Endof Overrides//
-
-// Mimic Methods //
-    //TODO fix walking
     protected boolean canAttack() {
         return true;
+    }
+
+    @Override
+    public void onPlayerCollision(PlayerEntity player) {
+        this.damage(player);
+    }
+    protected float getDamageAmount() {
+        return (float)this.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
+    }
+
+    private void damage(LivingEntity target) {
+        if (this.isAlive()) {
+            if (target.damage(DamageSource.mob(this), this.getDamageAmount())) {
+                this.playSound(SoundEvents.ENTITY_SLIME_ATTACK, 1.0f, 0.2f);
+                this.applyDamageEffects(this, target);
+            }
+        }
     }
 
     protected boolean makesJumpSound() {
        return true;
    }
 
-    public void tick() {
-        this.stretch += (this.targetStretch - this.stretch) * 0.5F;
-        this.lastStretch = this.stretch;
-        super.tick();
-        if (this.onGround && !this.onGroundLastTick) {
-            int i = 1;
-
-            for(int j = 0; j < i * 8; ++j) {
-                float f = this.random.nextFloat() * 6.2831855F;
-                float g = this.random.nextFloat() * 0.5F + 0.5F;
-                float h = MathHelper.sin(f) * (float)i * 0.5F * g;
-                float k = MathHelper.cos(f) * (float)i * 0.5F * g;
-                this.world.addParticle(this.getParticles(), this.getX() + (double)h, this.getY(), this.getZ() + (double)k, 0.0D, 0.0D, 0.0D);
-            }
-
-            this.playSound(this.getSquishSound(), this.getSoundVolume(), ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F) / 0.8F);
-            this.targetStretch = -0.5F;
-        } else if (!this.onGround && this.onGroundLastTick) {
-            this.targetStretch = 1.0F;
-        }
-
-        this.onGroundLastTick = this.onGround;
-        this.updateStretch();
-    }
-
-    protected void updateStretch() {
-        this.targetStretch *= 0.6F;
-    }
-
     protected int getTicksUntilNextJump() {
         return this.random.nextInt(20) + 10;
     }
 
+    /*public Identifier getChestLoot(Identifier id) {
+        return id;
+    }
+    @Override
+    protected Identifier getLootTableId(){
+        Identifier id2 = ((id2) new getChestLoot());
 
-// Mimic goals //
+        return getChestLoot(id2);
+    }*/
+
+    // Mimic goals //
     static class MoveGoal extends Goal {
         private final MimicEntity mimic;
 
@@ -159,14 +154,15 @@ public class MimicEntity extends SlimeEntity implements IAnimatable {
             this.mimic = mimic;
             this.setControls(EnumSet.of(Goal.Control.JUMP, Goal.Control.MOVE));
         }
-
+        @Override
         public boolean canStart() {
             return !this.mimic.hasVehicle();
         }
 
-        /*public void tick() {
+        @Override
+        public void tick() {
             ((MimicEntity.MimicMoveControl)this.mimic.getMoveControl()).move(1.0D);
-        }*/
+        }
     }
 
     static class FaceTowardTargetGoal extends Goal {
@@ -185,7 +181,7 @@ public class MimicEntity extends SlimeEntity implements IAnimatable {
             } else if (!livingEntity.isAlive()) {
                 return false;
             } else {
-                return livingEntity instanceof PlayerEntity && ((PlayerEntity)livingEntity).getAbilities().invulnerable ? false : this.mimic.getMoveControl() instanceof MimicEntity.MimicMoveControl;
+                return (!(livingEntity instanceof PlayerEntity) || !((PlayerEntity) livingEntity).getAbilities().invulnerable) && this.mimic.getMoveControl() instanceof MimicMoveControl;
             }
         }
 
@@ -260,6 +256,7 @@ public class MimicEntity extends SlimeEntity implements IAnimatable {
            this.state = MoveControl.State.MOVE_TO;
        }
 
+       @Override
        public void tick() {
            this.entity.setYaw(this.wrapDegrees(this.entity.getYaw(), this.targetYaw, 90.0F));
            this.entity.headYaw = this.entity.getYaw();

@@ -21,9 +21,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import panbanan.panbananspackage.entity.EntityRegister;
 import panbanan.panbananspackage.entity.mobs.MimicEntity;
-
 import java.util.Random;
-//TODO try to extend chest and make the block render as regular chest instead of model
 
 public class MimicChestBlock extends Block {
 
@@ -44,8 +42,6 @@ public class MimicChestBlock extends Block {
     public BlockState getPlacementState(ItemPlacementContext ctx) {
         return this.getDefaultState().with(Properties.HORIZONTAL_FACING, ctx.getPlayerFacing().getOpposite());
     }
-
-    //TODO Add world generation similar to YungsCaves.
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
