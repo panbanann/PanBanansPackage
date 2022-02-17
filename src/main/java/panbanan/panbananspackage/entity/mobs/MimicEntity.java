@@ -1,6 +1,9 @@
 package panbanan.panbananspackage.entity.mobs;
 
-import net.minecraft.block.ChestBlock;
+import net.minecraft.advancement.criterion.Criteria;
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.entity.LootableContainerBlockEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
@@ -12,20 +15,27 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.Monster;
-import net.minecraft.entity.mob.SlimeEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootTable;
+import net.minecraft.loot.LootTables;
+import net.minecraft.loot.context.LootContext;
+import net.minecraft.loot.context.LootContextParameters;
+import net.minecraft.loot.context.LootContextTypes;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
-import panbanan.panbananspackage.mixin.ChestBlockMixin;
-import panbanan.panbananspackage.mixin.LootableContainerBlockEntityAccessor;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -39,15 +49,18 @@ import java.util.EnumSet;
 
 public class MimicEntity extends MobEntity implements Monster, IAnimatable {
 
+    // the loot table of the original chest
+    private Identifier chestLootTableID = LootTables.EMPTY;
+    
     private final AnimationFactory factory = new AnimationFactory(this);
-
-
+    
     public MimicEntity(EntityType<? extends MimicEntity> entityType, World worldIn){
-        super((EntityType<? extends MobEntity>)entityType, worldIn);
+        super(entityType, worldIn);
         this.moveControl = new MimicEntity.MimicMoveControl(this);
         this.ignoreCameraFrustum = true;
     }
-// Animation control //
+    
+    // Animation control //
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event)
     {
         if (event.isMoving()){
@@ -75,7 +88,7 @@ public class MimicEntity extends MobEntity implements Monster, IAnimatable {
     public AnimationFactory getFactory() {
         return this.factory;
     }
-//Endof Animation Control//
+    //Endof Animation Control//
 
     @Override
     protected void initGoals() {
@@ -86,8 +99,46 @@ public class MimicEntity extends MobEntity implements Monster, IAnimatable {
         this.goalSelector.add(3, new PounceAtTargetGoal(this, 0.4f));
         super.initGoals();
     }
-
-    //TODO adding spawn rule to always face player on spawn.
+    
+    // Store and load the LootTable when saving / loading the world
+    @Override
+    public void writeCustomDataToNbt(NbtCompound nbt) {
+        super.writeCustomDataToNbt(nbt);
+        if(chestLootTableID != null && chestLootTableID != LootTables.EMPTY) {
+            nbt.putString("ChestLootTable", chestLootTableID.toString());
+        }
+    }
+    
+    @Override
+    public void readCustomDataFromNbt(NbtCompound nbt) {
+        super.readCustomDataFromNbt(nbt);
+        if(nbt.contains("ChestLootTable", NbtElement.STRING_TYPE)) {
+            this.chestLootTableID = Identifier.tryParse(nbt.getString("ChestLootTable"));
+        }
+    }
+    
+    @Override
+    protected void dropLoot(DamageSource source, boolean causedByPlayer) {
+        // drop the content of the stored loot table
+        if(this.chestLootTableID != LootTables.EMPTY) {
+            LootTable lootTable = this.world.getServer().getLootManager().getTable(this.chestLootTableID);
+            
+            LootContext.Builder builder = (new LootContext.Builder((ServerWorld)this.world)).parameter(LootContextParameters.ORIGIN, this.getPos()).random(this.random);
+    
+            // trigger advancements and stuff
+            if (source.getSource() instanceof ServerPlayerEntity serverPlayerEntity) {
+                Criteria.PLAYER_GENERATES_CONTAINER_LOOT.trigger(serverPlayerEntity, this.chestLootTableID);
+                builder.luck(serverPlayerEntity.getLuck()).parameter(LootContextParameters.THIS_ENTITY, serverPlayerEntity);
+            }
+            
+            lootTable.generateLoot(builder.build(LootContextTypes.CHEST), this::dropStack);
+            
+            // TODO: It just drops the loot tables contents. Drop a chest or whichever block it was spawned from, too?
+        }
+        
+        // drop its default drops
+        super.dropLoot(source, causedByPlayer);
+    }
 
     @Override
     public boolean canPickupItem(ItemStack stack) {
@@ -135,16 +186,11 @@ public class MimicEntity extends MobEntity implements Monster, IAnimatable {
     protected int getTicksUntilNextJump() {
         return this.random.nextInt(20) + 10;
     }
-
-    /*public Identifier getChestLoot(Identifier id) {
-        return id;
+    
+    // store the loot table of the chest converted from
+    public void setChestLootTableID(Identifier lootTableId) {
+        this.chestLootTableID = lootTableId;
     }
-    @Override
-    protected Identifier getLootTableId(){
-        Identifier id2 = ((id2) new getChestLoot());
-
-        return getChestLoot(id2);
-    }*/
 
     // Mimic goals //
     static class MoveGoal extends Goal {
@@ -209,7 +255,7 @@ public class MimicEntity extends MobEntity implements Monster, IAnimatable {
         }
     }
 
-// Mimic Media //
+    // Mimic Media //
     //TODO change the sound effect for more woodlike instead of slime.
     protected SoundEvent getJumpSound() {
         return SoundEvents.ENTITY_SLIME_JUMP;
@@ -231,15 +277,14 @@ public class MimicEntity extends MobEntity implements Monster, IAnimatable {
         return ParticleTypes.ITEM_SLIME;
     }
 
-// Mimic movement control //
+    // Mimic movement control //
     //TODO learn how to make the movement correctly without using slimeEntity as extend.
-   static class MimicMoveControl extends MoveControl {
-       private float targetYaw;
-       private int ticksUntilJump;
-       private final MimicEntity mimic;
-       private boolean jumpOften;
-
-
+    static class MimicMoveControl extends MoveControl {
+        private float targetYaw;
+        private int ticksUntilJump;
+        private final MimicEntity mimic;
+        private boolean jumpOften;
+        
        public MimicMoveControl(MimicEntity mimic) {
            super(mimic);
            this.mimic = mimic;

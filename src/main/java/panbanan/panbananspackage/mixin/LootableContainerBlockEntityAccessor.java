@@ -15,4 +15,16 @@ public interface LootableContainerBlockEntityAccessor {
 
     @Accessor
     Identifier getLootTableId();
+	
+	@Accessor
+	void setLootTableId(Identifier identifier);
+	
+	// TODO: Use those, too
+	@Accessor
+	long getLootTableSeed();
+	
+	@Accessor
+	void setLootTableSeed(long seed);
+	
+	
 }
