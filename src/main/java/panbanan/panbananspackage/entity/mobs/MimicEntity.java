@@ -227,9 +227,7 @@ public class MimicEntity extends MobEntity implements Monster, IAnimatable {
         return SoundEvents.ENTITY_SLIME_SQUISH;
     }
 
-    protected ParticleEffect getParticles() {
-        return ParticleTypes.ITEM_SLIME;
-    }
+
 
 // Mimic movement control //
     //TODO learn how to make the movement correctly without using slimeEntity as extend.
@@ -238,6 +236,9 @@ public class MimicEntity extends MobEntity implements Monster, IAnimatable {
        private int ticksUntilJump;
        private final MimicEntity mimic;
        private boolean jumpOften;
+       protected ParticleEffect getParticles() {return ParticleTypes.ITEM_SLIME;}
+       private World world = this.entity.getWorld();
+
 
 
        public MimicMoveControl(MimicEntity mimic) {
@@ -261,6 +262,7 @@ public class MimicEntity extends MobEntity implements Monster, IAnimatable {
            this.entity.setYaw(this.wrapDegrees(this.entity.getYaw(), this.targetYaw, 90.0F));
            this.entity.headYaw = this.entity.getYaw();
            this.entity.bodyYaw = this.entity.getYaw();
+
            if (this.state != MoveControl.State.MOVE_TO) {
                this.entity.setForwardSpeed(0.0F);
            } else {
@@ -276,13 +278,16 @@ public class MimicEntity extends MobEntity implements Monster, IAnimatable {
                        this.mimic.getJumpControl().setActive();
                        if (this.mimic.makesJumpSound()) {
                            this.mimic.playSound(this.mimic.getJumpSound(), 1, 1);
+                           //This doesn't work
+                           world.addParticle(this.getParticles(), mimic.getX(), mimic.getY(), mimic.getZ(), 0.0, 0.0, 0.0);
                        }
                    } else {
                        this.mimic.sidewaysSpeed = 0.0F;
                        this.mimic.forwardSpeed = 0.0F;
                        this.entity.setMovementSpeed(0.0F);
                    }
-               } else {
+               }
+               else {
                    this.entity.setMovementSpeed((float)(this.speed * this.entity.getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED)));
                }
 

@@ -5,6 +5,7 @@ import net.minecraft.util.Identifier;
 import panbanan.panbananspackage.blocks.BlockRegistry;
 import panbanan.panbananspackage.config.EntityConfig;
 import panbanan.panbananspackage.config.ItemsConfig;
+import panbanan.panbananspackage.effect.EffectRegistry;
 import panbanan.panbananspackage.entity.EntityRegister;
 import panbanan.panbananspackage.items.ItemRegistry;
 import software.bernie.geckolib3.GeckoLib;
@@ -25,6 +26,7 @@ public class PanBanansPackage implements ModInitializer {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        EffectRegistry.init();
         ItemRegistry.registerItems();
         GeckoLib.initialize();
         BlockRegistry.blockInit();
