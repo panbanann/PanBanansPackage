@@ -1,10 +1,12 @@
 package panbanan.panbananspackage.mixin;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.ChestBlock;
+import de.dafuqs.lootcrates.blocks.LootCrateBlock;
+import de.dafuqs.lootcrates.blocks.LootCrateBlockEntity;
+import de.dafuqs.lootcrates.blocks.LootCratesBlockEntityType;
+import de.dafuqs.lootcrates.blocks.chest.ChestLootCrateBlockEntity;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.entity.LootableContainerBlockEntity;
 import net.minecraft.entity.AreaEffectCloudEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -19,7 +21,6 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
-import org.apache.commons.compress.archivers.ar.ArArchiveEntry;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -60,43 +61,49 @@ public abstract class ChestBlockMixin {
         add(Identifier.tryParse("lootcrates:blaze_shulker_loot_crate"));
         add(Identifier.tryParse("lootcrates:blaze_loot_barrel"));
     }};
-    
+
     //TODO prevent destroying chests when the lootcrates is installed.
     //TODO save the loot table information and give loot on kill plus extra
     @Inject(method = "onUse", at = @At("HEAD"), cancellable = true)
     public void onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> cir) {
+
+
+
         if (!world.isClient) {
             // test if the block used is not contained in the blacklist
             // if yes roll a random number and check if it is lower than the value set in chanceForChestToTurnIntoMimic
-            Identifier blockIdentifier = Registry.BLOCK.getId(state.getBlock());
-            if (!mimicSafeBlocks.contains(blockIdentifier) && world.getRandom().nextDouble() < chanceForChestToTurnIntoMimic) {
+
+            // *!mimicSafeBlocks.contains(blockIdentifier) &&* <this should be in check below for blacklisting lootcrates.
+            //if (blockIdentifier && world.getRandom().nextDouble() < chanceForChestToTurnIntoMimic) {
                 // since we cannot be 100 % sure that each chest block uses a LootableContainerBlockEntity
                 // better check if it is true here (modded ones). This also acts as a failsafe if the chests
                 // BlockEntity vanished for some reason
-                BlockEntity blockEntity = world.getBlockEntity(pos);
+                //BlockEntity blockEntity = world.getBlockEntity(pos);
+
+            Identifier blockIdentifier = Registry.BLOCK.getId(state.getBlock());
+            BlockEntityType blockEntityType = world.getBlockEntity(pos).getType();
+            BlockEntity blockEntity = world.getBlockEntity(pos);
                 if (blockEntity instanceof LootableContainerBlockEntity lootableContainerBlockEntity) {
                     LootableContainerBlockEntityAccessor tableAccess = ((LootableContainerBlockEntityAccessor) lootableContainerBlockEntity);
                     Identifier lootTableId = tableAccess.getLootTableId();
+//
                     // do nothing if the loot table is empty
                     if (lootTableId != null && lootTableId != LootTables.EMPTY) {
-                    
                         // using world.playSound makes it so everyone can hear it, not just the player that opened the chest itself
                         world.playSound(null, pos, SoundEvents.BLOCK_CHEST_OPEN, SoundCategory.BLOCKS, 1.0F, 0.5F);
-                
                         AreaEffectCloudEntity poofCloud = new AreaEffectCloudEntity(world, pos.getX(), pos.getY(), pos.getZ());
                         poofCloud.setRadius(10.0F);
                         poofCloud.setWaitTime(0);
                         poofCloud.setParticleType(ParticleTypes.EXPLOSION);
                         poofCloud.setDuration(0);
                         world.spawnEntity(poofCloud);
-                
                         MimicEntity mimicEntity = EntityRegister.MIMIC.create(world);
-                        mimicEntity.lookAtEntity(player, 0, 0);
                         mimicEntity.setChestLootTableID(lootTableId);
                 
                         // always directly face player when spawning
                         mimicEntity.refreshPositionAndAngles(pos, (player.getYaw() + 180) % 360, 180);
                         mimicEntity.setTarget(player);
+
                         world.spawnEntity(mimicEntity);
                         
                         // since the mimic has the loot table now remove it from the chest
@@ -105,13 +112,13 @@ public abstract class ChestBlockMixin {
                         // when the chest is removed normally it drops its loot
                         // that can be skipped by passing SKIP_DROPS as Flag
                         // this skips the drop of the Chest Item
+
                         world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3 | Block.SKIP_DROPS);
-                        
+
                         // cancel all the code that would run after turning it into the mimic
                         cir.setReturnValue(ActionResult.CONSUME);
                     }
                 }
-            }
         }
     }
 }
