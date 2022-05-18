@@ -36,6 +36,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
+import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -61,15 +62,12 @@ public class MimicEntity extends MobEntity implements Monster, IAnimatable {
     }
     
     // Animation control //
-    private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event)
+    private <E extends MimicEntity> @NotNull PlayState basic(@NotNull AnimationEvent<E> event)
     {
         if (event.isMoving()){
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.mimic.moving", true));
             return PlayState.CONTINUE;
         }
-
-        //TODO dashing animation and ability
-
         if ((this.isDead() || this.dead || this.getHealth() < 0.01)) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.mimic.death", false));
             return PlayState.CONTINUE;
@@ -78,10 +76,16 @@ public class MimicEntity extends MobEntity implements Monster, IAnimatable {
         event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.mimic.idle", true));
         return PlayState.CONTINUE;
     }
+    //TODO dashing animation and ability
+    private <E extends  IAnimatable> PlayState attack(AnimationEvent<E> event){
+
+        return PlayState.CONTINUE;
+    }
 
     @Override
-    public void registerControllers(AnimationData animationData) {
-        animationData.addAnimationController(new AnimationController(this, "controller", 0, this::predicate));
+    public void registerControllers(@NotNull AnimationData animationData) {
+        animationData.addAnimationController(new AnimationController<>(this, "controller", 0, this::basic));
+        animationData.addAnimationController(new AnimationController<>(this, "attack_controller", 0, this::attack));
     }
 
     @Override
@@ -207,7 +211,7 @@ public class MimicEntity extends MobEntity implements Monster, IAnimatable {
 
         @Override
         public void tick() {
-            ((MimicEntity.MimicMoveControl)this.mimic.getMoveControl()).move(1.0D);
+            ((MimicEntity.MimicMoveControl)this.mimic.getMoveControl()).move(1.25f);
         }
     }
 

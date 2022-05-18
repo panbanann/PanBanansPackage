@@ -5,6 +5,7 @@ import panbanan.panbananspackage.items.ItemsIds;
 import java.io.*;
 import java.nio.file.*;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -36,16 +37,13 @@ public class ItemsConfig {
 
     public static void configInit() throws IOException {
         File configFile = new File("config/items_config.json");
-        //JsonParser parser = new JsonParser();
-
         Map<Object, Boolean> map = new HashMap<>();
         if (!configFile.exists()) {
             for (Object item : ItemsIds.itemsSets()) {
                 map.put(item, true);
-
-                String itemsJson = gson.toJson(map);
-                Files.write(configFile.toPath(), itemsJson.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.WRITE);
             }
+            String itemsJson = gson.toJson(map);
+            Files.write(configFile.toPath(), itemsJson.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.WRITE);
         }
         if (configFile.exists()) {
             JsonObject json = getJsonObject(readFile(new File("config/items_config.json")));
@@ -54,6 +52,23 @@ public class ItemsConfig {
             }
         }
     }
+
+    /*public static void createModelMap() throws IOException {
+        Path = ""
+        DirectoryStream directoryStream = new DirectoryStream() {
+            @Override
+            public Iterator iterator() {
+                return null;
+            }
+
+            @Override
+            public void close() throws IOException {
+
+            }
+        }
+    }*/
+
+
 }
 
 

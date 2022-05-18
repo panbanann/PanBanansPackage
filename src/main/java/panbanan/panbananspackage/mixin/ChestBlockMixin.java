@@ -11,6 +11,8 @@ import net.minecraft.block.entity.LootableContainerBlockEntity;
 import net.minecraft.entity.AreaEffectCloudEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.loot.LootTables;
+import net.minecraft.loot.context.LootContext;
+import net.minecraft.loot.provider.number.BinomialLootNumberProvider;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -62,6 +64,7 @@ public abstract class ChestBlockMixin {
         add(Identifier.tryParse("lootcrates:blaze_loot_barrel"));
     }};
 
+
     //TODO prevent destroying chests when the lootcrates is installed.
     //TODO save the loot table information and give loot on kill plus extra
     @Inject(method = "onUse", at = @At("HEAD"), cancellable = true)
@@ -78,7 +81,6 @@ public abstract class ChestBlockMixin {
                 // since we cannot be 100 % sure that each chest block uses a LootableContainerBlockEntity
                 // better check if it is true here (modded ones). This also acts as a failsafe if the chests
                 // BlockEntity vanished for some reason
-                //BlockEntity blockEntity = world.getBlockEntity(pos);
 
             Identifier blockIdentifier = Registry.BLOCK.getId(state.getBlock());
             BlockEntityType blockEntityType = world.getBlockEntity(pos).getType();
@@ -108,7 +110,9 @@ public abstract class ChestBlockMixin {
                         
                         // since the mimic has the loot table now remove it from the chest
                         // else it would drop that loot when broken by the next line
+
                         tableAccess.setLootTableId(LootTables.EMPTY);
+
                         // when the chest is removed normally it drops its loot
                         // that can be skipped by passing SKIP_DROPS as Flag
                         // this skips the drop of the Chest Item
