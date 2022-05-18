@@ -31,7 +31,8 @@ public class PanBanansPackage implements ModInitializer {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //EffectRegistry.init();
+
+        EffectRegistry.init();
         ItemRegistry.registerItems();
         GeckoLib.initialize();
         BlockRegistry.blockInit();

@@ -2,6 +2,8 @@ package panbanan.panbananspackage.entity;
 
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
+import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
@@ -11,14 +13,21 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
+import panbanan.panbananspackage.PanBanansPackage;
 import panbanan.panbananspackage.config.EntityConfig;
 import panbanan.panbananspackage.entity.mobs.FieryGolemEntity;
 import panbanan.panbananspackage.entity.mobs.GhoulEntity;
 import panbanan.panbananspackage.entity.mobs.MimicEntity;
 import panbanan.panbananspackage.entity.mobs.NiddhogEntity;
+import panbanan.panbananspackage.entity.projectile.TestProjectileCopyPaste;
+import software.bernie.example.entity.RocketProjectile;
+import software.bernie.example.registry.EntityRegistryBuilder;
+import software.bernie.geckolib3.GeckoLib;
 
 
 import java.util.Map;
+
+import static software.bernie.example.registry.EntityRegistry.buildEntity;
 
 public class EntityRegister {
     //This class needs manual adding for each entity because of laziness. Add public static EntityType for every new model.
@@ -33,6 +42,9 @@ public class EntityRegister {
     public static Item MIMIC_SPAWN_EGG = null;
     public static Item NIDDHOG_SPAWN_EGG = null;
     public static Item GHOUL_SPAWN_EGG = null;
+
+    public static EntityType<TestProjectileCopyPaste> TEST_PROJECTILE = buildEntity(TestProjectileCopyPaste::new, TestProjectileCopyPaste.class, 0.5F,
+            0.5F, SpawnGroup.MISC);
 
     public static void onInitialize() {
         //Looping through map, saving keys and values and check for entity to register exact entity. Not automatic, maybe in the future.
@@ -70,4 +82,14 @@ public class EntityRegister {
             }
         }
     }
+    public static <T extends Entity> EntityType<T> buildEntity(EntityType.EntityFactory<T> entity, Class<T> entityClass,
+                                                               float width, float height, SpawnGroup group) {
+        if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
+            String name = entityClass.getSimpleName().toLowerCase();
+            return EntityRegistryBuilder.<T>createBuilder(new Identifier(PanBanansPackage.MOD_ID, name)).entity(entity)
+                    .category(group).dimensions(EntityDimensions.changing(width, height)).build();
+        }
+        return null;
+    }
+
 }

@@ -21,6 +21,7 @@ public class ItemsIds {
 
     public static Set itemsSets(){
         Set<String> itemSet = new HashSet<String>();
+        itemSet.add("armor_sattes_helmet");
         itemSet.add("weapon_lupus_borealis");
         itemSet.add("weapon_mare_tranquilitis");
         itemSet.add("weapon_morningstar");

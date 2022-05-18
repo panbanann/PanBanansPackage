@@ -1,0 +1,46 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"idle": {
+			"animation_length": 0.04,
+			"bones": {
+				"Rocket": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					}
+				}
+			}
+		},
+		"animation.ball_projectile.spin": {
+			"loop": true,
+			"animation_length": 2.08,
+			"bones": {
+				"cubes": {
+					"rotation": {
+						"0.0": {
+							"vector": ["math.cos(query.anim_time * 200) * 10", "math.sin(query.anim_time * 200) * 10", "math.sin(query.anim_time * 200) * 10"]
+						},
+						"1.04": {
+							"vector": ["math.cos(query.anim_time * 200) * 10", "math.sin(query.anim_time * 200) * 10", "180+math.sin(query.anim_time * 200) * 10"]
+						},
+						"2.08": {
+							"vector": ["math.cos(query.anim_time * 200) * 10", "math.sin(query.anim_time * 200) * 10", "math.sin(query.anim_time * 200) * 10"]
+						}
+					},
+					"position": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"base": {
+					"rotation": {
+						"vector": ["math.cos(query.anim_time * 200) * 10", "math.sin(query.anim_time * 200) * 10", "math.cos(query.anim_time * 200) * 10"]
+					},
+					"position": {
+						"vector": [0, 0, 0]
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}
